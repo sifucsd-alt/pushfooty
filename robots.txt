@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /summary-cache.json
+
+Sitemap: https://pushfooty.zuluaunty.com/sitemap.xml

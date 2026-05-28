@@ -1,0 +1,13 @@
+{
+  "name": "pushfooty",
+  "version": "1.0.0",
+  "description": "Glancing football headlines",
+  "main": "scripts/engine.js",
+  "scripts": {
+    "update": "node scripts/engine.js",
+    "start": "node scripts/engine.js"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
