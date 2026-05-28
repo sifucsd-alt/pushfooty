@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- ── Primary SEO ── -->
+  <title>PushFooty — Glancing football headlines</title>
+  <meta name="description" content="PushFooty delivers glancing football headlines from the EPL, PSL, Champions League and Gulf. Fast, minimal, no noise. Part of the ZuluAunty network.">
+  <meta name="keywords" content="football news, PSL news, Premier League headlines, EPL transfers, South African football, UCL news, Gulf football, soccer headlines, football transfers">
+  <meta name="author" content="PushFooty / ZuluAunty Network">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://pushfooty.zuluaunty.com/">
+
+  <!-- ── Open Graph (WhatsApp, Facebook, LinkedIn previews) ── -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="PushFooty — Glancing football headlines">
+  <meta property="og:description" content="EPL, PSL, Champions League and Gulf football headlines at a glance. Fast, minimal, no noise.">
+  <meta property="og:url" content="https://pushfooty.zuluaunty.com/">
+  <meta property="og:site_name" content="PushFooty">
+  <meta property="og:locale" content="en_ZA">
+
+  <!-- ── Twitter/X card ── -->
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="PushFooty — Glancing football headlines">
+  <meta name="twitter:description" content="EPL, PSL, UCL and Gulf football headlines. Fast, minimal, no noise.">
+
+  <!-- ── Geo targeting (SA primary) ── -->
+  <meta name="geo.region" content="ZA">
+  <meta name="geo.placename" content="South Africa">
+  <meta name="ICBM" content="-30.5595, 22.9375">
+
+  <!-- ── RSS autodiscovery (lets aggregators find and index PushFooty) ── -->
+  <link rel="alternate" type="application/rss+xml" title="PushFooty Feed" href="./feed.json">
+
+  <!-- ── JSON-LD Structured Data (tells Google this is a news aggregator) ── -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "NewsMediaOrganization",
+    "name": "PushFooty",
+    "url": "https://pushfooty.zuluaunty.com",
+    "description": "Glancing football headlines — EPL, PSL, Champions League, Gulf football",
+    "foundingLocation": {
+      "@type": "Place",
+      "name": "South Africa"
+    },
+    "memberOf": {
+      "@type": "Organization",
+      "name": "ZuluAunty Network",
+      "url": "https://zuluaunty.com"
+    },
+    "coverageArea": [
+      { "@type": "Place", "name": "South Africa" },
+      { "@type": "Place", "name": "United Kingdom" },
+      { "@type": "Place", "name": "United Arab Emirates" }
+    ]
+  }
+  </script>
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #ffffff;
+      --bg2: #f7f7f5;
+      --bg3: #f0f0ec;
+      --text: #1a1a1a;
+      --text2: #555550;
+      --text3: #999990;
+      --border: #e8e8e4;
+      --epl: #3d0035;
+      --psl: #006b3f;
+      --ucl: #003399;
+      --gulf: #c8860a;
+      --hot: #d03a1a;
+      --partner-bg: #fafaf7;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #111110;
+        --bg2: #1c1c1a;
+        --bg3: #222220;
+        --text: #e8e8e2;
+        --text2: #a0a09a;
+        --text3: #606058;
+        --border: #2a2a28;
+        --partner-bg: #161614;
+      }
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      font-size: 14px;
+      line-height: 1.5;
+      min-height: 100vh;
+    }
+
+    /* ── Header ── */
+    header {
+      border-bottom: 1px solid var(--border);
+      padding: 14px 16px 10px;
+      position: sticky;
+      top: 0;
+      background: var(--bg);
+      z-index: 100;
+    }
+
+    .header-top {
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .logo {
+      font-size: 17px;
+      font-weight: 700;
+      letter-spacing: -0.3px;
+      color: var(--text);
+      text-decoration: none;
+    }
+
+    .tagline {
+      font-size: 11px;
+      color: var(--text3);
+      letter-spacing: 0.2px;
+    }
+
+    .updated {
+      margin-left: auto;
+      font-size: 10px;
+      color: var(--text3);
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* ── Filter tabs ── */
+    .filters {
+      display: flex;
+      gap: 4px;
+      flex-wrap: wrap;
+    }
+
+    .filter-btn {
+      padding: 3px 9px;
+      border: 1px solid var(--border);
+      background: none;
+      border-radius: 3px;
+      font-size: 11px;
+      font-weight: 600;
+      cursor: pointer;
+      color: var(--text2);
+      letter-spacing: 0.4px;
+      transition: all 0.1s;
+    }
+
+    .filter-btn:hover { border-color: var(--text3); color: var(--text); }
+    .filter-btn.active { background: var(--text); color: var(--bg); border-color: var(--text); }
+    .filter-btn.epl.active  { background: var(--epl);  border-color: var(--epl); }
+    .filter-btn.psl.active  { background: var(--psl);  border-color: var(--psl); }
+    .filter-btn.ucl.active  { background: var(--ucl);  border-color: var(--ucl); }
+    .filter-btn.gulf.active { background: var(--gulf); border-color: var(--gulf); }
+
+    /* ── Feed ── */
+    main { max-width: 680px; margin: 0 auto; padding: 0 0 40px; }
+
+    .section-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      color: var(--text3);
+      padding: 14px 16px 6px;
+      text-transform: uppercase;
+    }
+
+    /* ── Headline row ── */
+    .headline-row {
+      display: flex;
+      align-items: baseline;
+      gap: 0;
+      padding: 0 16px;
+      border-bottom: 1px solid var(--border);
+      min-height: 36px;
+    }
+
+    .headline-row:hover { background: var(--bg2); }
+
+    .time {
+      font-size: 11px;
+      color: var(--text3);
+      font-variant-numeric: tabular-nums;
+      min-width: 38px;
+      padding: 10px 8px 10px 0;
+      flex-shrink: 0;
+    }
+
+    .league-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      margin-right: 8px;
+      margin-top: 1px;
+      align-self: center;
+    }
+
+    .ld-EPL  { background: var(--epl); }
+    .ld-PSL  { background: var(--psl); }
+    .ld-UCL  { background: var(--ucl); }
+    .ld-GULF { background: var(--gulf); }
+
+    .headline-text {
+      flex: 1;
+      font-size: 13px;
+      color: var(--text);
+      padding: 10px 8px 10px 0;
+      line-height: 1.35;
+    }
+
+    .source-tag {
+      font-size: 10px;
+      color: var(--text3);
+      padding: 10px 0;
+      white-space: nowrap;
+      flex-shrink: 0;
+      margin-right: 6px;
+    }
+
+    /* ── Read more dots + tooltip ── */
+    .read-more {
+      display: inline-flex;
+      align-items: center;
+      padding: 9px 0 9px 4px;
+      position: relative;
+      flex-shrink: 0;
+      cursor: pointer;
+    }
+
+    .dots {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text3);
+      letter-spacing: 1px;
+      line-height: 1;
+      text-decoration: none;
+      padding: 2px 4px;
+      border-radius: 3px;
+      transition: color 0.1s, background 0.1s;
+    }
+
+    .dots:hover { color: var(--text); background: var(--border); }
+
+    .tooltip {
+      display: none;
+      position: absolute;
+      right: 0;
+      top: calc(100% + 4px);
+      background: var(--text);
+      color: var(--bg);
+      padding: 9px 12px;
+      border-radius: 5px;
+      font-size: 12px;
+      line-height: 1.5;
+      width: 240px;
+      z-index: 200;
+      pointer-events: none;
+      white-space: pre-line;
+    }
+
+    .tooltip strong { display: block; font-size: 12px; font-weight: 700; margin-bottom: 3px; }
+    .tooltip p { font-size: 11px; opacity: 0.85; }
+
+    .read-more:hover .tooltip,
+    .read-more:focus-within .tooltip { display: block; }
+    .tooltip.visible { display: block; }
+
+    /* ── Partners section ── */
+    .partners-section {
+      max-width: 680px;
+      margin: 0 auto;
+      border-top: 1px solid var(--border);
+      background: var(--partner-bg);
+    }
+
+    .partners-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      color: var(--text3);
+      padding: 14px 16px 10px;
+      text-transform: uppercase;
+    }
+
+    /* Bento grid */
+    .partners-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1px;
+      background: var(--border);
+      margin: 0 16px 16px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      overflow: hidden;
+    }
+
+    .partner-tile {
+      background: var(--partner-bg);
+      padding: 12px 14px;
+      text-decoration: none;
+      display: block;
+      transition: background 0.1s;
+    }
+
+    .partner-tile:hover { background: var(--bg2); }
+
+    .partner-name {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text2);
+      letter-spacing: 0.3px;
+      margin-bottom: 2px;
+    }
+
+    .partner-cta {
+      font-size: 11px;
+      color: var(--text3);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .partner-cta::after {
+      content: "→";
+      font-size: 10px;
+    }
+
+    /* ── AdSense placeholder ── */
+    .adsense-slot {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 12px 16px;
+      border-top: 1px solid var(--border);
+      min-height: 90px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* ── Footer ── */
+    footer {
+      text-align: center;
+      padding: 20px 16px;
+      font-size: 10px;
+      color: var(--text3);
+      border-top: 1px solid var(--border);
+      max-width: 680px;
+      margin: 0 auto;
+    }
+
+    footer a { color: var(--text3); text-decoration: underline; }
+
+    /* ── Loading ── */
+    .status {
+      padding: 40px 16px;
+      text-align: center;
+      color: var(--text3);
+      font-size: 13px;
+    }
+
+    .loading-dots::after {
+      content: '';
+      animation: ldots 1.2s steps(3, end) infinite;
+    }
+
+    @keyframes ldots {
+      0%   { content: ''; }
+      33%  { content: '.'; }
+      66%  { content: '..'; }
+      100% { content: '...'; }
+    }
+
+    @media (max-width: 480px) {
+      .tooltip { right: -8px; width: 220px; }
+      .source-tag { display: none; }
+      .partners-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="header-top">
+    <a class="logo" href="/">PUSHFOOTY</a>
+    <span class="tagline">Glancing football headlines</span>
+    <span class="updated" id="updated-time"></span>
+  </div>
+  <div class="filters">
+    <button class="filter-btn active" data-league="ALL">ALL</button>
+    <button class="filter-btn epl"  data-league="EPL">EPL</button>
+    <button class="filter-btn ucl"  data-league="UCL">UCL</button>
+    <button class="filter-btn psl"  data-league="PSL">PSL</button>
+    <button class="filter-btn gulf" data-league="GULF">GULF</button>
+  </div>
+</header>
+
+<main id="feed">
+  <div class="status"><span class="loading-dots">Loading</span></div>
+</main>
+
+<!-- ── Partners / Sponsored ── -->
+<section class="partners-section" id="partners-section" aria-label="Partners">
+  <div class="partners-label">Partners</div>
+  <div class="partners-grid" id="partners-grid">
+    <!-- Populated by partners.json -->
+  </div>
+</section>
+
+<!-- ── AdSense slot (activate when ready) ── -->
+<!--
+ADSENSE INSTRUCTIONS:
+1. Apply at: https://adsense.google.com
+2. Once approved, replace this comment block with your ad unit code
+3. Recommended blocked categories in AdSense dashboard:
+   - Gambling & Betting
+   - Adult content
+   - Dating
+   - Alcohol
+   - Tobacco
+   - Get rich quick
+   - Political
+
+<div class="adsense-slot">
+  <ins class="adsbygoogle"
+    style="display:block"
+    data-ad-client="ca-pub-XXXXXXXXXXXXXXXXX"
+    data-ad-slot="XXXXXXXXXX"
+    data-ad-format="horizontal"
+    data-full-width-responsive="true">
+  </ins>
+  <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+</div>
+-->
+
+<footer>
+  PushFooty aggregates headlines from public sources. All stories link to original publishers.
+  <br><br>
+  Part of the <a href="https://zuluaunty.com" target="_blank" rel="noopener">ZuluAunty</a> network.
+</footer>
+
+<script>
+  const FEED_URL = './feed.json';
+  const PARTNERS_URL = './partners.json';
+  let allItems = [];
+  let activeLeague = 'ALL';
+
+  // ── Time formatting ──
+  function formatTime(iso) {
+    const d = new Date(iso);
+    const now = new Date();
+    const diff = now - d;
+    if (diff < 60000) return 'now';
+    if (diff < 3600000) return Math.floor(diff / 60000) + 'm';
+    if (diff < 86400000) {
+      return d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false });
+    }
+    return d.toLocaleDateString([], { day: 'numeric', month: 'short' });
+  }
+
+  // ── Parse summary ──
+  function parseSummary(summary) {
+    if (!summary) return null;
+    const lines = summary.split('\n').map(l => l.trim()).filter(Boolean);
+    if (lines.length >= 2) return { name: lines[0], detail: lines[1] };
+    if (lines.length === 1) return { name: lines[0], detail: '' };
+    return null;
+  }
+
+  // ── Build headline row ──
+  function buildRow(item) {
+    const row = document.createElement('div');
+    row.className = 'headline-row';
+    row.dataset.league = item.league;
+    const summary = parseSummary(item.summary);
+    row.innerHTML = `
+      <span class="time">${formatTime(item.pubDate)}</span>
+      <span class="league-dot ld-${item.league}"></span>
+      <span class="headline-text">${item.title}</span>
+      <span class="source-tag">${item.source}</span>
+      <span class="read-more" role="button" tabindex="0" aria-label="Sneak peek">
+        <a class="dots" href="${item.url}" target="_blank" rel="noopener noreferrer">···</a>
+        ${summary ? `
+        <span class="tooltip">
+          <strong>${summary.name}</strong>
+          <p>${summary.detail}</p>
+        </span>` : ''}
+      </span>`;
+
+    const btn = row.querySelector('.read-more');
+    if (btn) {
+      btn.addEventListener('click', (e) => {
+        const tt = btn.querySelector('.tooltip');
+        if (!tt) return;
+        if (e.target.classList.contains('dots')) return;
+        e.preventDefault();
+        tt.classList.toggle('visible');
+      });
+    }
+    return row;
+  }
+
+  // ── Render feed ──
+  function render(league) {
+    const feed = document.getElementById('feed');
+    const items = league === 'ALL' ? allItems : allItems.filter(i => i.league === league);
+    if (items.length === 0) {
+      feed.innerHTML = `<div class="status">No headlines found for ${league}.</div>`;
+      return;
+    }
+    feed.innerHTML = '';
+    const label = document.createElement('div');
+    label.className = 'section-label';
+    label.textContent = league === 'ALL' ? 'Latest' : league;
+    feed.appendChild(label);
+    items.forEach(item => feed.appendChild(buildRow(item)));
+  }
+
+  // ── Load partners ──
+  async function loadPartners() {
+    try {
+      const res = await fetch(`${PARTNERS_URL}?t=${Date.now()}`);
+      if (!res.ok) return;
+      const data = await res.json();
+      const grid = document.getElementById('partners-grid');
+      if (!grid || !data.partners) return;
+      grid.innerHTML = '';
+      data.partners.forEach(p => {
+        const tile = document.createElement('a');
+        tile.className = 'partner-tile';
+        tile.href = p.url;
+        tile.target = '_blank';
+        tile.rel = 'noopener sponsored';
+        tile.innerHTML = `
+          <div class="partner-name">${p.name}</div>
+          <div class="partner-cta">${p.cta}</div>`;
+        grid.appendChild(tile);
+      });
+    } catch(e) {
+      // Partners section fails silently
+      document.getElementById('partners-section').style.display = 'none';
+    }
+  }
+
+  // ── Filter buttons ──
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      activeLeague = btn.dataset.league;
+      render(activeLeague);
+    });
+  });
+
+  // ── Load feed ──
+  async function loadFeed() {
+    try {
+      const res = await fetch(`${FEED_URL}?t=${Date.now()}`);
+      if (!res.ok) throw new Error('Feed not found');
+      const data = await res.json();
+      allItems = data.items || [];
+      const updated = document.getElementById('updated-time');
+      if (data.updated) updated.textContent = formatTime(data.updated);
+      render(activeLeague);
+    } catch(e) {
+      document.getElementById('feed').innerHTML =
+        `<div class="status">Could not load feed. Check back shortly.</div>`;
+    }
+  }
+
+  // ── Init ──
+  loadFeed();
+  loadPartners();
+  setInterval(loadFeed, 120000);
+</script>
+
+</body>
+</html>

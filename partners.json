@@ -1,0 +1,25 @@
+{
+  "_instructions": "Edit this file to update partners. Each entry needs name, cta (call to action), and url. Max 4 partners for the 2x2 grid. ZuluAunty should always be one of the four.",
+  "partners": [
+    {
+      "name": "ZuluAunty",
+      "cta": "Learn the language behind the game",
+      "url": "https://zuluaunty.com"
+    },
+    {
+      "name": "SuperSport",
+      "cta": "Watch PSL & EPL live",
+      "url": "https://supersport.com"
+    },
+    {
+      "name": "Sportscene",
+      "cta": "Kit up for the new season",
+      "url": "https://sportscene.co.za"
+    },
+    {
+      "name": "FlySafair",
+      "cta": "Fly to the next derby",
+      "url": "https://flysafair.co.za"
+    }
+  ]
+}
