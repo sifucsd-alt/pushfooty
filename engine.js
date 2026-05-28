@@ -224,9 +224,21 @@ async function run() {
 
   console.log(`  Already cached: ${allItems.length - needsSummary.length} | New: ${needsSummary.length}`);
 
-  // Call Claude only for new headlines, in one batch
-  if (needsSummary.length > 0) {
-    const newSummaries = await callClaude(needsSummary);
+  // ── HARD CAP: never send more than 10 headlines to Claude per run ──
+  // Cost protection — even if cache is empty or broken, max 10 API calls.
+  // Items over the cap fall back to RSS description automatically.
+  const MAX_CLAUDE_PER_RUN = 10;
+  const toSummarise = needsSummary.slice(0, MAX_CLAUDE_PER_RUN);
+  const overCap = needsSummary.slice(MAX_CLAUDE_PER_RUN);
+
+  if (overCap.length > 0) {
+    console.warn(`  ⚠ Cap: ${overCap.length} item(s) over limit — RSS fallback used for those`);
+  }
+
+  // Call Claude only for capped batch
+  if (toSummarise.length > 0) {
+    console.log(`  Sending ${toSummarise.length} headline(s) to Claude (cap: ${MAX_CLAUDE_PER_RUN})`);
+    const newSummaries = await callClaude(toSummarise);
     Object.assign(cache, newSummaries);
     saveCache(cache);
     console.log(`  Cache updated with ${Object.keys(newSummaries).length} new summaries`);
